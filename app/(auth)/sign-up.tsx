@@ -13,6 +13,7 @@ import { fetchAPI } from "@/lib/fetch";
 const SignUp = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [disabledSignUPButton , setDisableSignUpButton] = useState(false)
 
   const [form, setForm] = useState({
     name: "",
@@ -27,6 +28,7 @@ const SignUp = () => {
 
   const onSignUpPress = async () => {
     if (!isLoaded) return;
+    setDisableSignUpButton(true)
     try {
       await signUp.create({
         emailAddress: form.email,
@@ -40,6 +42,8 @@ const SignUp = () => {
     } catch (err: any) {
       console.log(JSON.stringify(err, null, 2));
       Alert.alert("Error", err.errors[0].longMessage);
+    }finally{
+      setDisableSignUpButton(false)
     }
   };
   const onPressVerify = async () => {
@@ -72,6 +76,7 @@ const SignUp = () => {
     } catch (err: any) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
+      console.log("jhdbf", err)
       setVerification({
         ...verification,
         error: err.errors[0].longMessage,
@@ -117,6 +122,7 @@ const SignUp = () => {
             title="Sign Up"
             onPress={onSignUpPress}
             className="mt-6"
+            disabled={disabledSignUPButton}
           />
           <OAuth />
           <Link
