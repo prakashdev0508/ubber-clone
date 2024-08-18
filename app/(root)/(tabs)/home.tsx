@@ -1,14 +1,23 @@
-import React from 'react';
-import { StyleSheet, View , Text } from 'react-native';
+import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo'
+import { Link } from 'expo-router'
+import { Text, View } from 'react-native'
 
-const Home = () => {
-    return (
-        <View>
-            <Text>Home Screen</Text>
-        </View>
-    );
+export default function Page() {
+  const { user } = useUser()
+
+  return (
+    <View>
+      <SignedIn>
+        <Text>Hello {user?.emailAddresses[0].emailAddress}</Text>
+      </SignedIn>
+      <SignedOut>
+        <Link href="/sign-in">
+          <Text>Sign In</Text>
+        </Link>
+        <Link href="/sign-up">
+          <Text>Sign Up</Text>
+        </Link>
+      </SignedOut>
+    </View>
+  )
 }
-
-const styles = StyleSheet.create({})
-
-export default Home;
