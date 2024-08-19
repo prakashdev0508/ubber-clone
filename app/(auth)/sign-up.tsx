@@ -13,7 +13,7 @@ import { fetchAPI } from "@/lib/fetch";
 const SignUp = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [disabledSignUPButton , setDisableSignUpButton] = useState(false)
+  const [disabledSignUPButton, setDisableSignUpButton] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -28,7 +28,7 @@ const SignUp = () => {
 
   const onSignUpPress = async () => {
     if (!isLoaded) return;
-    setDisableSignUpButton(true)
+    setDisableSignUpButton(true);
     try {
       await signUp.create({
         emailAddress: form.email,
@@ -42,8 +42,8 @@ const SignUp = () => {
     } catch (err: any) {
       console.log(JSON.stringify(err, null, 2));
       Alert.alert("Error", err.errors[0].longMessage);
-    }finally{
-      setDisableSignUpButton(false)
+    } finally {
+      setDisableSignUpButton(false);
     }
   };
   const onPressVerify = async () => {
@@ -53,14 +53,14 @@ const SignUp = () => {
         code: verification.code,
       });
       if (completeSignUp.status === "complete") {
-        // await fetchAPI("/(api)/user", {
-        //   method: "POST",
-        //   body: JSON.stringify({
-        //     name: form.name,
-        //     email: form.email,
-        //     clerkId: completeSignUp.createdUserId,
-        //   }),
-        // });
+        await fetchAPI("/(api)/user", {
+          method: "POST",
+          body: JSON.stringify({
+            name: form.name,
+            email: form.email,
+            clerkId: completeSignUp.createdUserId,
+          }),
+        });
         await setActive({ session: completeSignUp.createdSessionId });
         setVerification({
           ...verification,
@@ -76,7 +76,7 @@ const SignUp = () => {
     } catch (err: any) {
       // See https://clerk.com/docs/custom-flows/error-handling
       // for more info on error handling
-      console.log("jhdbf", err)
+      console.log("jhdbf", err);
       setVerification({
         ...verification,
         error: err.errors[0].longMessage,
